@@ -10,7 +10,7 @@ TODO :
 
     [ ] vertical
 
-[ ] 2D to 3D
+[x] 2D to 3D
 
 [ ] Implement FPS Camera
 

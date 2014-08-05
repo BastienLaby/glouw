@@ -26,9 +26,7 @@ class Map(object):
                     if iWorld >= self.width or jWorld >= self.height:
                         continue
                     try:
-                        print("brick in %d %d (elt %d)" % (iWorld, jWorld, jWorld * self.width + iWorld))
                         self.buffer[jWorld * self.width + iWorld] += 1
                         
                     except IndexError:
-                        print("elt %d out of range" % (jWorld * self.width + iWorld))
                         pass
