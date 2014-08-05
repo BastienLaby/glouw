@@ -38,7 +38,7 @@ class Cube(object):
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, None)
         glBufferData(GL_ARRAY_BUFFER, normals, GL_STATIC_DRAW)
 
-        glBindBuffer(GL_ARRAY_BUFFER, vboNorm)
+        glBindBuffer(GL_ARRAY_BUFFER, vboUVs)
         glEnableVertexAttribArray(2)
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, None)
         glBufferData(GL_ARRAY_BUFFER, uvs, GL_STATIC_DRAW)

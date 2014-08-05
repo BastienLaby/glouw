@@ -1,8 +1,11 @@
 #version 150
 
+in vec3 frag_normal;
+in vec2 frag_uv;
+
 out vec4 Color;
 
 void main(void)
 {
-    Color = vec4(1.0, 0.0, 1.0, 1.0);
+    Color = vec4(frag_normal, 1.0);
 }
