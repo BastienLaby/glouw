@@ -2,7 +2,8 @@ glouw
 =====
 Python and OpenGL procedural world generation
 
-TODO:
+TODO :
+
 [ ] Generate Cubic Pyramid
 [ ] Implement FPS Camera
 [ ] Apply render effects
