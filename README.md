@@ -6,6 +6,12 @@ TODO :
 
 [ ] Generate Cubic Pyramid
 
+    [x] horizontal
+
+    [ ] vertical
+
+[ ] 2D to 3D
+
 [ ] Implement FPS Camera
 
 [ ] Apply render effects

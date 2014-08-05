@@ -12,20 +12,23 @@ class Map(object):
     def __init__(self, width, height):
         self.width, self.height = width, height
         self.buffer = []
-        for i in range(self.width * self.height):
-            self.buffer.append({
-                "height" : 0,
-                "color" : [0, 0, 0]})
+        for i in range(width * height):
+            self.buffer.append(0)
 
     def addPyramid(self, pyramid):
-        for i in range(- pyramid.radius, pyramid.radius + 1):
-            for j in range(-pyramid.radius, pyramid.radius + 1):
-                distToCenter = sqrt(i**2 + j**2)
-                if(distToCenter < pyramid.radius):
-                    worldSpace = [i + pyramid.center[0], j + pyramid.center[1]]
-                    tile = self.buffer[worldSpace[1] * self.width + worldSpace[0]]
-                    tile["height"] += distToCenter / pyramid.radius
-
-
-
-
+        r = pyramid.radius
+        for i in range(-r, r+1):
+            for j in range(-r, r+1):
+                distToPyramidCenter = abs(i) + abs(j)
+                #distToPyramidCenter = sqrt(i**2 + j**2)
+                if distToPyramidCenter <= pyramid.radius:
+                    iWorld, jWorld = i + pyramid.center[0], j + pyramid.center[1]
+                    if iWorld >= self.width or jWorld >= self.height:
+                        continue
+                    try:
+                        print("brick in %d %d (elt %d)" % (iWorld, jWorld, jWorld * self.width + iWorld))
+                        self.buffer[jWorld * self.width + iWorld] += 1
+                        
+                    except IndexError:
+                        print("elt %d out of range" % (jWorld * self.width + iWorld))
+                        pass
