@@ -13,6 +13,7 @@ import Shader
 import Cube
 import Matrices
 import Texture
+import FPSCamera
 
 MAP_WIDTH = 20
 MAP_HEIGHT = MAP_WIDTH
@@ -60,13 +61,26 @@ def checkGLErrors():
     if(glGetError() != GL_NO_ERROR):
         print('Error OpenGL : ' + str(glGetError()))
 
+def drawRepere():
+    glBegin(GL_LINES)
+    glColor3f(1.0, 0.0, 0.0)
+    glVertex3f(0.0, 0.0, 0.0)
+    glVertex3f(1.0, 0.0, 0.0)
+    glColor3f(0.0, 1.0, 0.0)
+    glVertex3f(0.0, 0.0, 0.0)
+    glVertex3f(0.0, 1.0, 0.0)
+    glColor3f(0.0, 0.0, 1.0)
+    glVertex3f(0.0, 0.0, 0.0)
+    glVertex3f(0.0, 0.0, 1.0)
+    glEnd()
+
 
 #
-# Init data for rendering
+# Init
 #
 
-WIN_WIDTH = 1280
-WIN_HEIGHT = 860
+WIN_WIDTH = 800
+WIN_HEIGHT = 500
 
 pygame.init()
 screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.OPENGL | pygame.DOUBLEBUF | pygame.RESIZABLE)
@@ -74,6 +88,10 @@ screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT), pygame.OPENGL | pygame
 p = Pyramid((5, 5), 5, 10, (1.0, 0.0, 0.0))
 mymap = Map(MAP_WIDTH, MAP_HEIGHT)
 mymap.addPyramid(p)
+
+#
+# GL Stuff
+#
 
 cube = Cube.Cube()
 
@@ -95,16 +113,21 @@ glBindFramebuffer(GL_FRAMEBUFFER, 0)
 checkGLErrors()
 
 #
-# RenderLoop
+# Other stuff
 #
 
+camera = FPSCamera.FPSCamera()
+
+#
+# RenderLoop
+#
+fov = 25;
 go = True
 while go:
 
     # Render
 
-    # glBindFramebuffer(GL_FRAMEBUFFER, fbo)
-    # glDrawBuffer(GL_COLOR_ATTACHMENT0)
+    glViewport(0, 0, WIN_WIDTH, WIN_HEIGHT)
 
     glEnable(GL_DEPTH_TEST)
     glClearColor(0.1, 0.1, 0.1, 1.0)
@@ -112,34 +135,62 @@ while go:
 
     glUseProgram(shader.id)
 
-    projection = Matrices.perspective(5, WIN_WIDTH / float(WIN_HEIGHT), 0.001, 1000)
-    view = Matrices.lookat((0, 0, 2), (0, 0, 0), (0, 1, 0))
-    model = Matrices.translate((math.cos(time.time()), 0.0, 0.0))
+    
+
+    projection = Matrices.perspective(fov, WIN_WIDTH / float(WIN_HEIGHT), 1, 10000)
+    view = camera.getLookatMatrix()
     glUniformMatrix4fv(projLoc, 1, GL_TRUE, projection.astype(numpy.float32))
     glUniformMatrix4fv(viewLoc, 1, GL_TRUE, view.astype(numpy.float32))
-    glUniformMatrix4fv(modelLoc, 1, GL_TRUE, model.astype(numpy.float32))
+    
+    # cube 1
 
-    cube.draw()
-    # glBindFramebuffer(GL_FRAMEBUFFER, fbo)
+    for i in range(10):
+        for j in range(10):
+            model = Matrices.translate([i * 2, 0.0, j * 2])
+            glUniformMatrix4fv(modelLoc, 1, GL_TRUE, model.astype(numpy.float32))
+            cube.draw()
 
-    # Blit on screen
 
-    # glBindFramebuffer(GL_READ_FRAMEBUFFER, fbo)
-    # glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0)
-    # glReadBuffer(GL_COLOR_ATTACHMENT0)
-    # glDrawBuffer(GL_BACK)
 
     glUseProgram(0)
-
     checkGLErrors()
 
     pygame.display.flip()
 
+    #
+    # Events
+    #
+
+    if(pygame.key.get_pressed()[pygame.K_w]):
+        camera.moveFront(0.01)
+    if(pygame.key.get_pressed()[pygame.K_s]):
+        camera.moveFront(-0.01)
+    if(pygame.key.get_pressed()[pygame.K_a]):
+        camera.moveLeft(0.01)
+    if(pygame.key.get_pressed()[pygame.K_d]):
+        camera.moveLeft(-0.01)
+
     for e in pygame.event.get():
+
         if e.type == pygame.QUIT:
             go = False
+
         elif e.type == pygame.VIDEORESIZE:
             WIN_WIDTH, WIN_HEIGHT = e.dict['size']
+
+        elif e.type == pygame.MOUSEMOTION:      
+            xrel, yrel = pygame.mouse.get_rel()
+            print(xrel, yrel, ""),
+            camera.rotateLeft(xrel)
+            camera.rotateUp(yrel)
+
+        elif e.type == pygame.KEYDOWN:
+            if e.key == pygame.K_KP1:
+                fov += 1
+            elif e.key == pygame.K_KP2:
+                fov -= 1
+            elif e.key == pygame.K_SPACE:
+                camera.reset()
 
 pygame.quit()
 

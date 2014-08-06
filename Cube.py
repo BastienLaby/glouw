@@ -18,27 +18,27 @@ class Cube(object):
         indices = numpy.array([0, 1, 2, 2, 1, 3, 4, 5, 6, 6, 5, 7, 8, 9, 10, 10, 9, 11, 12, 13, 14, 14, 13, 15, 16, 17, 18, 19, 17, 20, 21, 22, 23, 24, 25, 26], dtype="int32")
 
         self.vao = glGenVertexArrays(1)
-        vboPos = glGenBuffers(1)
-        vboNorm = glGenBuffers(1)
-        vboUVs = glGenBuffers(1)
-        vboIdx = glGenBuffers(1)
+        self.vboPos = glGenBuffers(1)
+        self.vboNorm = glGenBuffers(1)
+        self.vboUVs = glGenBuffers(1)
+        self.vboIdx = glGenBuffers(1)
 
         glBindVertexArray(self.vao)
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboIdx)
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self.vboIdx)
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW)
 
-        glBindBuffer(GL_ARRAY_BUFFER, vboPos)
+        glBindBuffer(GL_ARRAY_BUFFER, self.vboPos)
         glEnableVertexAttribArray(0)
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, None)
         glBufferData(GL_ARRAY_BUFFER, positions, GL_STATIC_DRAW)
 
-        glBindBuffer(GL_ARRAY_BUFFER, vboNorm)
+        glBindBuffer(GL_ARRAY_BUFFER, self.vboNorm)
         glEnableVertexAttribArray(1)
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, None)
         glBufferData(GL_ARRAY_BUFFER, normals, GL_STATIC_DRAW)
 
-        glBindBuffer(GL_ARRAY_BUFFER, vboUVs)
+        glBindBuffer(GL_ARRAY_BUFFER, self.vboUVs)
         glEnableVertexAttribArray(2)
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, None)
         glBufferData(GL_ARRAY_BUFFER, uvs, GL_STATIC_DRAW)
