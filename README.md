@@ -1,29 +1,19 @@
 glouw
 =====
-Python and OpenGL procedural world generation
+Python template for 3D OpenGL applications. Work in progress.
 
-TODO :
-
-[ ] Generate Cubic Pyramid
-
-    [x] horizontal
-
-    [ ] vertical
+Roadmap : 
+=====
 
 [x] 2D to 3D
 
-[ ] Implement FPS Camera
+Cameras:
+    [] FPS Camera
+    [] Trackball Camera
 
-[ ] Apply render effects
+Meshs:
+    [] 3D Meshs
+    [] Load frrom OBJ file
 
-    [ ] Lighting
-    
-    [ ] Sobel
-    
-    [ ] Rimlight
-    
-    [ ] Gamma correction
-    
-    [ ] ...
-    
-[ ] GUI for world generation
+Shading:
+    [] More configurable GLSL program class
